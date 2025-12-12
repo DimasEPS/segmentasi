@@ -12,11 +12,29 @@ Script `main.py` menjalankan segmentasi tepi berbasis discontinuity untuk empat 
   - `mse_chart.png` grafik batang MSE.
   - `best_noise/` salinan hasil dengan MSE terendah per operator.
 
-### Menjalankan
-Aktifkan terlebih dahulu virtualenv bawaan tugas noise & filter (berisi `opencv-python` dan `numpy`):
+### Setup Environment
 ```bash
-source ../Pengcit_Noise-And-Filter/venv/bin/activate
-# atau langsung:
-../Pengcit_Noise-And-Filter/venv/bin/python main.py
+# Buat virtual environment
+python -m venv venv
+
+# Aktivasi venv
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
 ```
+
+### Menjalankan
+```bash
+# Pastikan venv sudah aktif
+source venv/bin/activate
+
+# Run program
+python main.py
+```
+
 Output tersimpan di folder `output` (dibuat otomatis). Nilai MSE dihitung relatif terhadap hasil segmentasi grayscale bersih, sehingga makin kecil makin mirip citra tanpa derau.
+
+### Dependencies
+- `opencv-python==4.12.0.88`
+- `numpy==2.2.6`
