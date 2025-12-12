@@ -1,0 +1,9 @@
+image,variant,operator,mse_to_gray,edge_path
+rata-rata,saltpepper,roberts,1663.8919067382812,
+rata-rata,saltpepper,prewitt,1018.4071655273438,
+rata-rata,saltpepper,sobel,1090.683837890625,
+rata-rata,saltpepper,frei-chen,1019.6974182128906,
+rata-rata,gaussian,roberts,497.81048583984375,
+rata-rata,gaussian,prewitt,230.21569061279297,
+rata-rata,gaussian,sobel,259.2780456542969,
+rata-rata,gaussian,frei-chen,238.31861877441406,
