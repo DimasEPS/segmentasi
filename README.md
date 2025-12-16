@@ -10,12 +10,12 @@ Script `main.py` menjalankan segmentasi tepi berbasis discontinuity untuk empat 
   - `edges/<variant>/<operator>.png` hasil segmentasi.
   - `metrics.csv` detail MSE per citra/variant/operator.
   - `summary.csv` rata-rata MSE per operator (saltpepper vs gaussian).
-  - `mse_chart.png` grafik batang MSE (diperbaharui dengan grid, legend, dan info lebih jelas).
+  - `mse_chart.png` grafik batang MSE (1400x800px dengan grid, legend, shadow, axis labels).
   - `best_noise/` salinan hasil dengan MSE terendah per operator.
-  - `resegmented_best/` re-segmentasi citra terbaik Prewitt dengan semua operator.
-  - `resegmented_metrics.csv` detail MSE hasil re-segmentasi.
-  - `resegmented_comparison_chart.png` grafik perbandingan hasil re-segmentasi.
-  - `comparison_table.csv` tabel perbandingan MSE dalam format yang mudah dibaca.
+  - `resegmented_best/` re-segmentasi **1 citra terbaik** (MSE Prewitt terendah) dengan semua operator untuk kedua noise.
+  - `resegmented_metrics.csv` detail MSE hasil re-segmentasi citra terbaik.
+  - `resegmented_comparison_chart.png` grafik visual perbandingan hasil re-segmentasi (1200x700px).
+  - `comparison_table.csv` tabel perbandingan lengkap dengan metadata, ranking, analisis, stabilitas, dan kesimpulan.
 
 ### Setup Environment
 
@@ -41,6 +41,24 @@ python main.py
 ```
 
 Output tersimpan di folder `output` (dibuat otomatis). Nilai MSE dihitung relatif terhadap hasil segmentasi grayscale bersih, sehingga makin kecil makin mirip citra tanpa derau.
+
+### Fitur Analisis
+
+1. **Segmentasi Multi-Operator**: 4 operator (Roberts, Prewitt, Sobel, Frei-Chen) pada 4 kondisi citra
+2. **MSE Comparison**: Evaluasi ketahanan operator terhadap noise
+3. **Best Image Selection**: Otomatis memilih citra dengan hasil Prewitt terbaik
+4. **Re-segmentation**: Citra terbaik di-segmentasi ulang dengan semua operator untuk analisis mendalam
+5. **Visual Reports**: 2 chart informatif (ukuran besar dengan grid, legend, labels)
+6. **Comprehensive Table**: Tabel CSV lengkap dengan ranking, persentase, stabilitas, dan kesimpulan
+
+### Hasil Analisis
+
+Berdasarkan eksperimen:
+
+- **Terbaik untuk Gaussian**: Prewitt (MSE: 213.19)
+- **Terbaik untuk Salt & Pepper**: Frei-Chen (MSE: 978.13)
+- **Terbaik Overall**: Frei-Chen (paling balanced)
+- **Terburuk**: Roberts (98% lebih buruk dari terbaik)
 
 ### Dependencies
 

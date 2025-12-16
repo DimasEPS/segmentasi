@@ -1,6 +1,12 @@
 === PERBANDINGAN MSE HASIL SEGMENTASI ===
 "Semakin kecil MSE, semakin mirip dengan baseline (grayscale tanpa noise)"
 
+=== INFORMASI CITRA TERBAIK (Re-segmented) ===
+Citra:,landscape
+Variant terbaik Prewitt:,GAUSSIAN
+MSE Prewitt:,213.19
+Catatan:,Semua operator di-resegmentasi pada citra 'landscape' (saltpepper & gaussian)
+
 Operator,Gaussian MSE,Rank,Salt&Pepper MSE,Rank,Rata-rata,Selisih (S&P - Gaussian)
 FREI-CHEN,219.09,#2,978.13,#1,598.61,759.04
 PREWITT,213.19,#1,987.50,#2,600.34,774.31

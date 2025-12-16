@@ -353,51 +353,57 @@ def resegment_best_prewitt(records: list[dict]) -> tuple[list[dict], dict]:
     if not prewitt_records:
         return [], {}
     
-    # Pilih citra terbaik per noise type untuk Prewitt
-    best_by_noise = {}
-    for noise_type in ("saltpepper", "gaussian"):
-        candidates = [r for r in prewitt_records if r["variant"] == noise_type]
-        if candidates:
-            best = min(candidates, key=lambda x: x["mse_to_gray"])
-            best_by_noise[noise_type] = best
+    # Pilih 1 citra TERBAIK secara mutlak (MSE paling rendah) dari Prewitt
+    best_rec = min(prewitt_records, key=lambda x: x["mse_to_gray"])
+    
+    img_name = best_rec["image"]
+    best_variant = best_rec["variant"]
+    best_mse = best_rec["mse_to_gray"]
     
     reseg_records = []
     comparison_table = {}
     
-    for noise_type, best_rec in best_by_noise.items():
-        img_name = best_rec["image"]
-        variant = best_rec["variant"]
+    # Process semua noise variants dari citra terbaik ini
+    base_dir = OUTPUT_DIR / img_name
+    gray_path = base_dir / "sources" / f"{img_name}_gray.png"
+    
+    if not gray_path.exists():
+        return [], {}
+    
+    gray_img = cv2.imread(str(gray_path), cv2.IMREAD_GRAYSCALE)
+    if gray_img is None:
+        return [], {}
+    
+    # Segmentasi grayscale baseline dengan semua operator (sekali saja)
+    baseline_edges = {}
+    for op_name, kernels in OPERATORS.items():
+        baseline_edges[op_name] = edge_magnitude(gray_img, kernels)
+    
+    # Process setiap noise variant (saltpepper dan gaussian) dari citra terbaik
+    for noise_type in ("saltpepper", "gaussian"):
+        noisy_path = base_dir / "sources" / f"{img_name}_{noise_type}.png"
         
-        # Load citra noisy dan grayscale baseline
-        base_dir = OUTPUT_DIR / img_name
-        noisy_path = base_dir / "sources" / f"{img_name}_{variant}.png"
-        gray_path = base_dir / "sources" / f"{img_name}_gray.png"
-        
-        if not noisy_path.exists() or not gray_path.exists():
+        if not noisy_path.exists():
             continue
         
         noisy_img = cv2.imread(str(noisy_path), cv2.IMREAD_GRAYSCALE)
-        gray_img = cv2.imread(str(gray_path), cv2.IMREAD_GRAYSCALE)
-        
-        if noisy_img is None or gray_img is None:
+        if noisy_img is None:
             continue
         
-        # Segmentasi dengan semua operator
         reseg_dir = OUTPUT_DIR / "resegmented_best" / noise_type
         
         for op_name, kernels in OPERATORS.items():
             # Segmentasi noisy
             noisy_edges = edge_magnitude(noisy_img, kernels)
-            noisy_out = reseg_dir / f"{img_name}_{variant}_{op_name}.png"
+            noisy_out = reseg_dir / f"{img_name}_{noise_type}_{op_name}.png"
             save_image(noisy_out, noisy_edges)
             
-            # Segmentasi grayscale baseline
-            gray_edges = edge_magnitude(gray_img, kernels)
+            # Simpan baseline (dari dict yang sudah dihitung)
             gray_out = reseg_dir / f"{img_name}_gray_{op_name}.png"
-            save_image(gray_out, gray_edges)
+            save_image(gray_out, baseline_edges[op_name])
             
             # Hitung MSE
-            mse_val = mse(gray_edges, noisy_edges)
+            mse_val = mse(baseline_edges[op_name], noisy_edges)
             
             reseg_records.append({
                 "image": img_name,
@@ -632,12 +638,33 @@ def main() -> None:
         saltpepper_ranking = sorted(operators, key=lambda x: operator_stats[x]["saltpepper"])
         avg_ranking = sorted(operators, key=lambda x: operator_stats[x]["avg"])
         
+        # Dapatkan info citra terbaik untuk metadata
+        prewitt_records = [
+            r for r in all_records
+            if r["operator"] == "prewitt" and r["variant"] in ("saltpepper", "gaussian")
+        ]
+        if prewitt_records:
+            best_prewitt = min(prewitt_records, key=lambda x: x["mse_to_gray"])
+            best_img = best_prewitt["image"]
+            best_var = best_prewitt["variant"]
+            best_mse = best_prewitt["mse_to_gray"]
+        else:
+            best_img = "N/A"
+            best_var = "N/A"
+            best_mse = 0.0
+        
         with comparison_table_path.open("w", newline="") as f:
             writer = csv.writer(f)
             
-            # Header
+            # Header dengan info citra terbaik
             writer.writerow(["=== PERBANDINGAN MSE HASIL SEGMENTASI ==="])
             writer.writerow(["Semakin kecil MSE, semakin mirip dengan baseline (grayscale tanpa noise)"])
+            writer.writerow([])
+            writer.writerow(["=== INFORMASI CITRA TERBAIK (Re-segmented) ==="])
+            writer.writerow(["Citra:", best_img])
+            writer.writerow(["Variant terbaik Prewitt:", best_var.upper()])
+            writer.writerow(["MSE Prewitt:", f"{best_mse:.2f}"])
+            writer.writerow(["Catatan:", f"Semua operator di-resegmentasi pada citra '{best_img}' (saltpepper & gaussian)"])
             writer.writerow([])
             
             # Tabel utama
