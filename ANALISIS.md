@@ -5,7 +5,7 @@
 Berdasarkan data di `comparison_table.csv`:
 
 | Operator  | Gaussian | Salt & Pepper |
-|-----------|----------|---------------|
+| --------- | -------- | ------------- |
 | PREWITT   | 213.19   | 987.50        |
 | FREI-CHEN | 219.09   | 978.13        |
 | SOBEL     | 235.92   | 1025.78       |
@@ -14,12 +14,14 @@ Berdasarkan data di `comparison_table.csv`:
 ### Temuan Utama:
 
 #### Gaussian Noise:
+
 - **Terbaik**: Prewitt (MSE: 213.19)
 - **Terburuk**: Roberts (MSE: 422.32)
 - Prewitt dan Frei-Chen menunjukkan performa sangat baik dan mirip (~213-219)
 - Roberts paling sensitif terhadap Gaussian noise (hampir 2x lipat MSE)
 
 #### Salt & Pepper Noise:
+
 - **Terbaik**: Frei-Chen (MSE: 978.13)
 - **Terburuk**: Roberts (MSE: 1599.55)
 - Frei-Chen sedikit lebih baik dari Prewitt untuk noise impulsif
@@ -28,21 +30,25 @@ Berdasarkan data di `comparison_table.csv`:
 ## 2. Analisis Per Operator
 
 ### Prewitt
+
 - **Kelebihan**: Konsisten baik untuk Gaussian (terbaik) dan Salt & Pepper
 - **MSE Ratio**: 987.50 / 213.19 = 4.63x (degradasi sedang pada noise impulsif)
 - **Rekomendasi**: Pilihan terbaik untuk Gaussian noise
 
 ### Frei-Chen
+
 - **Kelebihan**: Terbaik untuk Salt & Pepper, runner-up untuk Gaussian
 - **MSE Ratio**: 978.13 / 219.09 = 4.47x (paling robust terhadap perubahan tipe noise)
 - **Rekomendasi**: Pilihan terbaik untuk Salt & Pepper, paling balanced overall
 
 ### Sobel
+
 - **Kelebihan**: Performa tengah untuk kedua tipe noise
 - **MSE Ratio**: 1025.78 / 235.92 = 4.35x
 - **Rekomendasi**: Pilihan aman untuk kedua tipe noise
 
 ### Roberts
+
 - **Kelebihan**: Kernel kecil (2x2), komputasi cepat
 - **Kelemahan**: Paling sensitif terhadap noise (MSE tertinggi untuk kedua tipe)
 - **MSE Ratio**: 1599.55 / 422.32 = 3.79x (paling sensitif ke noise impulsif)
@@ -51,16 +57,19 @@ Berdasarkan data di `comparison_table.csv`:
 ## 3. Kesimpulan
 
 1. **Gaussian noise lebih mudah ditangani** (MSE 4-5x lebih kecil) dibanding Salt & Pepper
+
    - Gaussian: noise aditif, terdistribusi merata
    - Salt & Pepper: noise impulsif, merusak informasi piksel secara drastis
 
 2. **Ranking operator berdasarkan robustness**:
+
    1. **Frei-Chen**: Paling balanced, terbaik untuk Salt & Pepper
    2. **Prewitt**: Terbaik untuk Gaussian, konsisten
    3. **Sobel**: Performa tengah, reliable
    4. **Roberts**: Paling sensitif, hindari untuk citra noisy
 
 3. **Ukuran kernel matters**:
+
    - Kernel 3x3 (Prewitt, Sobel, Frei-Chen) lebih robust
    - Kernel 2x2 (Roberts) terlalu sensitif terhadap noise
 
