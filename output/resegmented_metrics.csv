@@ -1,0 +1,9 @@
+image,noise_type,operator,mse,noisy_path,baseline_path
+landscape,saltpepper,roberts,1599.5458984375,resegmented_best/saltpepper/landscape_saltpepper_roberts.png,resegmented_best/saltpepper/landscape_gray_roberts.png
+landscape,saltpepper,prewitt,987.501708984375,resegmented_best/saltpepper/landscape_saltpepper_prewitt.png,resegmented_best/saltpepper/landscape_gray_prewitt.png
+landscape,saltpepper,sobel,1025.7808837890625,resegmented_best/saltpepper/landscape_saltpepper_sobel.png,resegmented_best/saltpepper/landscape_gray_sobel.png
+landscape,saltpepper,frei-chen,978.1273803710938,resegmented_best/saltpepper/landscape_saltpepper_frei-chen.png,resegmented_best/saltpepper/landscape_gray_frei-chen.png
+landscape,gaussian,roberts,422.3182373046875,resegmented_best/gaussian/landscape_gaussian_roberts.png,resegmented_best/gaussian/landscape_gray_roberts.png
+landscape,gaussian,prewitt,213.1874237060547,resegmented_best/gaussian/landscape_gaussian_prewitt.png,resegmented_best/gaussian/landscape_gray_prewitt.png
+landscape,gaussian,sobel,235.9188232421875,resegmented_best/gaussian/landscape_gaussian_sobel.png,resegmented_best/gaussian/landscape_gray_sobel.png
+landscape,gaussian,frei-chen,219.08599853515625,resegmented_best/gaussian/landscape_gaussian_frei-chen.png,resegmented_best/gaussian/landscape_gray_frei-chen.png

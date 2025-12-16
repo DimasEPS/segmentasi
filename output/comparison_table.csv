@@ -1,0 +1,39 @@
+=== PERBANDINGAN MSE HASIL SEGMENTASI ===
+"Semakin kecil MSE, semakin mirip dengan baseline (grayscale tanpa noise)"
+
+Operator,Gaussian MSE,Rank,Salt&Pepper MSE,Rank,Rata-rata,Selisih (S&P - Gaussian)
+FREI-CHEN,219.09,#2,978.13,#1,598.61,759.04
+PREWITT,213.19,#1,987.50,#2,600.34,774.31
+ROBERTS,422.32,#4,1599.55,#4,1010.93,1177.23
+SOBEL,235.92,#3,1025.78,#3,630.85,789.86
+
+=== RANKING OVERALL (berdasarkan rata-rata MSE) ===
+#1,FREI-CHEN,Rata-rata MSE: 598.61
+#2,PREWITT,Rata-rata MSE: 600.34
+#3,SOBEL,Rata-rata MSE: 630.85
+#4,ROBERTS,Rata-rata MSE: 1010.93
+
+=== ANALISIS ===
+Terbaik untuk Gaussian:,PREWITT,MSE: 213.19
+Terbaik untuk Salt&Pepper:,FREI-CHEN,MSE: 978.13
+Terbaik Overall:,FREI-CHEN,MSE rata-rata: 598.61
+Terburuk Overall:,ROBERTS,MSE rata-rata: 1010.93
+
+=== STABILITAS (resistance terhadap noise) ===
+#1,FREI-CHEN,Selisih: 759.04,(semakin kecil = lebih stabil)
+#2,PREWITT,Selisih: 774.31,(semakin kecil = lebih stabil)
+#3,SOBEL,Selisih: 789.86,(semakin kecil = lebih stabil)
+#4,ROBERTS,Selisih: 1177.23,(semakin kecil = lebih stabil)
+
+=== PERSENTASE PENINGKATAN (relatif terhadap terbaik) ===
+FREI-CHEN,Gaussian: +2.8%,Salt&Pepper: +0.0%
+PREWITT,Gaussian: +0.0%,Salt&Pepper: +1.0%
+ROBERTS,Gaussian: +98.1%,Salt&Pepper: +63.5%
+SOBEL,Gaussian: +10.7%,Salt&Pepper: +4.9%
+
+=== KESIMPULAN ===
+1. Noise Gaussian lebih mudah ditangani (MSE lebih rendah) dibanding Salt&Pepper untuk semua operator
+2. FREI-CHEN memberikan hasil terbaik secara keseluruhan (MSE rata-rata terendah)
+3. ROBERTS paling sensitif terhadap noise (MSE hingga 1.7x lipat)
+4. FREI-CHEN paling stabil (selisih performa antar noise paling kecil)
+"5. Untuk aplikasi real-world, rekomendasikan FREI-CHEN (optimal) atau PREWITT (stabil)"
